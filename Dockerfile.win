@@ -6,3 +6,4 @@ RUN powershell -Command \
     iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'));
 
 #    choco feature disable --name showDownloadProgress
+# docker run -it -v d:\Container-Data:c:\data microsoft/nanoserver powershell
