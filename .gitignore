@@ -34,9 +34,6 @@
 # VS directory
 .vs/
 
-# VS Code directory
-.vscode/
-
 # Emacs backup files
 *~
 
