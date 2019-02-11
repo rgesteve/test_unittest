@@ -19,4 +19,5 @@ RUN cd /tmp \
 RUN /tmp/vcpkg/vcpkg install gtest
 
 # Build
-
+# (assumes src has been mounted in /data)
+# cmake -DCMAKE_TOOLCHAIN_FILE=/tmp/vcpkg/scripts/buildsystems/vcpkg.cmake ..
