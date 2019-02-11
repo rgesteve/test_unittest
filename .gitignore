@@ -39,3 +39,6 @@
 
 # Emacs backup files
 *~
+
+# CMake build artifacts
+build/
