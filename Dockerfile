@@ -16,8 +16,16 @@ RUN cd /tmp \
     && ./bootstrap-vcpkg.sh
 
 # RUN /tmp/vcpkg/vcpkg install gtest protobuf
-RUN /tmp/vcpkg/vcpkg install gtest
+RUN VCPKG_FORCE_SYSTEM_BINARIES=1 /tmp/vcpkg/vcpkg install gtest
 
 # Build
 # (assumes src has been mounted in /data)
-# cmake -DCMAKE_TOOLCHAIN_FILE=/tmp/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+COPY ./src /src
+WORKDIR /src
+RUN    mkdir build \
+    && cd build    \
+    && cmake -DCMAKE_TOOLCHAIN_FILE=/tmp/vcpkg/scripts/buildsystems/vcpkg.cmake .. \
+    && make \
+    && make test
+
+
