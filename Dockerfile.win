@@ -1,14 +1,28 @@
 FROM microsoft/windowsservercore
 
+LABEL description="Build container -- test_unittest (Windows)"
 # ENV chocolateyUseWindowsCompression false
 
 RUN powershell -Command \
-    iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'));
-#    choco feature disable --name showDownloadProgress
+    iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')); \
+    choco feature disable --name showDownloadProgress
 
-RUN powershell -Command \
-    choco install -y visualcpp-build-tools
-
+# Install pre-requisites
+RUN choco install -y VisualCppBuildTools git cmake
+# choco install git -params '"/GitAndUnixToolsOnPath"'
+# why not microsoft-build-tools, vcbuildtools, visualcpp-build-tools
+RUN setx /M PATH "%PATH%;%ProgramFiles%\git\bin"
+RUN setx /M PATH "%PATH%;%ProgramFiles%\cmake\bin"
+RUN c:\program^ files^ ^(x86^)\microsoft^ visual^ c++^ build^ tools\vcbuildtools.bat
 # RUN C:\Program^ Files^ ^(x86^)\Microsoft^ Visual^ Studio\2017\BuildTools\Common7\Tools\VsDevCmd.bat -arch=amd64
 
-# docker run -it -v d:\Container-Data:c:\data microsoft/nanoserver {powershell,cmd}
+RUN md c:\temp \
+    && cd c:\temp \
+    && git clone https://github.com/Microsoft/vcpkg.git \
+    && cd vcpkg \
+    && .\bootstrap-vcpkg.bat
+
+RUN cd c:\temp\vcpkg \
+    && .\vcpkg install gtest
+
+# docker run -it -v d:\Container-Data:c:\data microsoft/nanoserver {powershell,cmd.exe}

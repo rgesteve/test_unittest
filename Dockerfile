@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 # FROM ubuntu:18.04 # as build
 
-LABEL description="Build container -- test_docker_vcpkg"
+LABEL description="Build container -- test_unittest"
 
 # Install pre-requisites
 
