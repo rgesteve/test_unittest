@@ -21,7 +21,7 @@ RUN choco install -y cmake
 # visualstudio2017buildtools
 
 # CMake 3.13 ExternalProject *needs* this variant of git or `git submodule init` fails
-#   (at least with Windows containers)
+#   (at least with Windows containers, see https://github.com/git-for-windows/git/issues/1661)
 ENV GIT_VERSION 2.15.1
 ENV GIT_PATCH_VERSION 2
 
