@@ -14,5 +14,5 @@ docker run -it [--rm] <image_name> {cmd.exe,/bin/bash}
 Once running within the container, either interactively or using `docker exec`, you can configure the build using:
 ```
 mkdir build && cd build
-cmake -DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake ..
+cmake -DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake ..\src
 ```

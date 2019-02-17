@@ -38,8 +38,8 @@ RUN cd c:\temp \
     && cd vcpkg \
     && .\bootstrap-vcpkg.bat
 
-#RUN cd c:\temp\vcpkg \
-#    && .\vcpkg install gtest
+RUN cd c:\temp\vcpkg \
+    && .\vcpkg install gtest
 
 ## Build
 #COPY src c:\\src
