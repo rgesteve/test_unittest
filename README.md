@@ -5,7 +5,14 @@ A skeletal project testing how to use `gtest`, `cmake`, `vcpkg` and
 
 To build, run
 ```
-docker build -t <some name> .
+docker build -t <image_name> [-f Dockerfile.win] .
 ```
-
-(For the moment, only works on Linux)
+and then
+```
+docker run -it [--rm] <image_name> {cmd.exe,/bin/bash}
+```
+Once running within the container, either interactively or using `docker exec`, you can configure the build using:
+```
+mkdir build && cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake ..
+```

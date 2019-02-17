@@ -3,26 +3,50 @@ FROM microsoft/windowsservercore
 LABEL description="Build container -- test_unittest (Windows)"
 # ENV chocolateyUseWindowsCompression false
 
+SHELL ["cmd", "/S", "/C"]
+
 RUN powershell -Command \
     iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')); \
     choco feature disable --name showDownloadProgress
 
 # Install pre-requisites
-RUN choco install -y VisualCppBuildTools git cmake
-# choco install git -params '"/GitAndUnixToolsOnPath"'
-# why not microsoft-build-tools, vcbuildtools, visualcpp-build-tools
-RUN setx /M PATH "%PATH%;%ProgramFiles%\git\bin"
-RUN setx /M PATH "%PATH%;%ProgramFiles%\cmake\bin"
-RUN c:\program^ files^ ^(x86^)\microsoft^ visual^ c++^ build^ tools\vcbuildtools.bat
-# RUN C:\Program^ Files^ ^(x86^)\Microsoft^ Visual^ Studio\2017\BuildTools\Common7\Tools\VsDevCmd.bat -arch=amd64
+#RUN choco install -y VisualCppBuildTools git cmake
+RUN choco install -y git cmake
+#Downloading channel manifest from 'https://aka.ms/vs/15/release/channel'
+# visualstudio2017buildtools
 
-RUN md c:\temp \
-    && cd c:\temp \
+RUN md c:\\temp
+ADD https://aka.ms/vs/15/release/vs_buildtools.exe C:\\TEMP\\vs_buildtools.exe
+
+RUN C:\temp\vs_buildtools.exe \
+      --quiet --wait --norestart --nocache \
+      --installPath c:\BuildTools \
+      --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
+      --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+      --add Microsoft.VisualStudio.Component.Windows10SDK.17134 \
+    || IF "%ERRORLEVEL%"=="3010" EXIT 0
+
+## choco install git -params '"/GitAndUnixToolsOnPath"'
+## why not microsoft-build-tools, vcbuildtools, visualcpp-build-tools
+#RUN setx /M PATH "%PATH%;%ProgramFiles%\git\bin"
+RUN set PATH=%PATH%;%ProgramFiles%\cmake\bin
+RUN setx /M PATH "%PATH%;%ProgramFiles%\cmake\bin"
+RUN c:\BuildTools\Common7\Tools\vsdevcmd -arch=amd64
+
+RUN cd c:\temp \
     && git clone https://github.com/Microsoft/vcpkg.git \
     && cd vcpkg \
     && .\bootstrap-vcpkg.bat
 
-RUN cd c:\temp\vcpkg \
-    && .\vcpkg install gtest
+#RUN cd c:\temp\vcpkg \
+#    && .\vcpkg install gtest
 
-# docker run -it -v d:\Container-Data:c:\data microsoft/nanoserver {powershell,cmd.exe}
+## Build
+#COPY src c:\\src
+#WORKDIR c:\\src
+#RUN md c:\build \
+#    && cd c:\build    \
+#    && cmake -DCMAKE_TOOLCHAIN_FILE=c:\temp\vcpkg\scripts\buildsystems\vcpkg.cmake c:\src
+
+## docker run -it -v d:\Container-Data:c:\data microsoft/nanoserver {powershell,cmd.exe}
+## docker run -it -v d:\Container-Data:c:\data microsoft/windowsservercore
