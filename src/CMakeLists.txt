@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+#cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
-project(test_unittest LANGUAGES CXX)
+#project(test_unittest LANGUAGES CXX)
 
 add_library(sum_integers sum_integers.cpp)
 
@@ -25,4 +25,3 @@ enable_testing()
 add_test(NAME cpp_test
   COMMAND $<TARGET_FILE:cpp_test>
 )
-
