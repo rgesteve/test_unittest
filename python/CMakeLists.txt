@@ -28,6 +28,8 @@ add_custom_command(
 )
 
 add_custom_target(python_wheel DEPENDS sum_integers ${CMAKE_BINARY_DIR}/python/dist/)
+#add_custom_target(python_wheel DEPENDS ${CMAKE_BINARY_DIR}/python/dist/)
+
 #if (NGRAPH_CPU_ENABLE)
 #    add_dependencies(python_wheel ext_mkldnn)
 #endif()
